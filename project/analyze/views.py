@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
+import json
+
 # this is the input page
 def index(request):
     context = {
@@ -16,7 +18,9 @@ def detail(request, question_id):
 # this is the results page 
 def results(request):
 	data = callBackend(request.POST)
-	return render(request, 'analyze/results.html', {'data': data})
+	print(type(data))
+	print(json.dumps(data))
+	return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
 # this is basically a controller/handler - it's the destination of index (which has the input form), 
 # it does some logic, and then redirects to the results page 
@@ -38,7 +42,41 @@ def upload(request):
         return HttpResponseRedirect(reverse('analyze:index'))
 
 def callBackend(data):
-	return { 'dictionaryKey1': 'dictionaryValue1' }
+	return HARDCODED_JSON
+
+HARDCODED_JSON = {
+	"apps":[
+		{
+			"name":"facebook",
+			"components":["a","b","c","l","k"]
+		},
+		{
+			"name":"bob",
+			"components":["e","f","g"]
+		},
+		{
+			"name":"evernote",
+			"components":["x","xc","xz","xv","xs","xa","xg","xw","xr","xy","xu"]
+		}
+	],
+	"covert":
+	[
+		{"start":"a","end":"g"},
+		{"start":"c","end":"f"},
+		{"start":"x","end":"f"},
+		{"start":"xc","end":"k"},
+		{"start":"xz","end":"l"},
+		{"start":"xv","end":"b"},
+		{"start":"xa","end":"e"},
+		{"start":"xw","end":"f"},
+		{"start":"xw","end":"e"}
+	],
+	"didfail":
+	[
+		{"start":"a","end":"g"},
+		{"start":"c","end":"f"}
+	]
+}
 
 """
 def visualization(request, nodesJson, linksJson):
