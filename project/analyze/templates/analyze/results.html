@@ -1,0 +1,15 @@
+{% if stuff %}
+	<li>
+	<a href="{% url 'analyze:results' %}">{{ data }}</a>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+{{ data }}
+
+<script type="text/javascript"> 
+	// http://stackoverflow.com/questions/298772/django-template-variables-and-javascript
+   var a = "{{stuff}}";
+
+   console.log(a);
+</script>
