@@ -37,44 +37,31 @@ def results(request):
 		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
 def list(request):
-	print("got here")
-	# Handle file upload
-	if request.method == 'POST':
-		print("type of the file input is " + str(type(request.FILES)))
+    # Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        print(form)
+        if form.is_valid():
+            newdoc = Document(docfile = request.FILES['uploadedFile'])
+            print(newdoc)
+            newdoc.save()
 
-		# FOR MULTPLE
-		# for afile in request.FILES.getlist('uploadedFiles'):
-		# 	saveFile(request.POST, afile)
-		
-		saveFile(request.POST, request.FILES)
+            print("yayayay")
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(reverse('analyze/list'))
+    else:
+        form = DocumentForm() # A empty, unbound form
 
-		# Redirect to the document list after POST
-		print("Redirect")
-		return HttpResponseRedirect(reverse('analyze/list.html'))
-	else:
-		form = DocumentForm() # A empty, unbound form
+    # Load documents for the list page
+    documents = Document.objects.all()
 
-	# Load documents for the list page
-	documents = Document.objects.all()
-
-	print("Render")
-	# Render list page with the documents and the form
-	return render_to_response(
-		'analyze/list.html',
-		{'documents': documents, 'form': form},
-		context_instance=RequestContext(request)
-	)
-
-def saveFile(POST, FILES):
-	print("entry is " + str(FILES))
-
-	# FOR MULTPLE - instead of file should be a dictionary form of FILES['some key']
-	# form = DocumentForm(request.POST, {"file" : file})
-	form = DocumentForm(POST, FILES)
-	if form.is_valid():
-		newdoc = Document(docfile = request.FILES['docfile'])
-		newdoc.save()
-
+    print("fuck")
+    # Render list page with the documents and the form
+    return render_to_response(
+        'analyze/list.html',
+        {'documents': documents, 'form': form},
+        context_instance=RequestContext(request)
+    )
 
 def callBackend(data):
 	return HARDCODED_JSON

@@ -15,8 +15,18 @@
 <form action="{% url 'analyze:list' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <!-- FOR MULTIPLE <input type="file" name="uploadedFiles" multiple="multiple"/> -->
-    <input type="file" name="uploadedFiles" />
+    <input type="file" name="uploadedFile" />
     <input type="submit" name="submit" value="Upload" />
-
-
 </form>
+<!--
+<form action="{% url 'analyze:list' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>{{ form.non_field_errors }}</p>
+    <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+    <p>
+        {{ form.docfile.errors }}
+        {{ form.docfile }}
+    </p>
+    <p><input type="submit" value="Upload" /></p>
+</form>
+-->
