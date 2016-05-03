@@ -17,7 +17,7 @@
     {% endif %}
 
         <!-- Upload form. Note enctype attribute! -->
-        <!--
+        
         <form action="{% url 'analyze:list' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <p>{{ form.non_field_errors }}</p>
@@ -28,6 +28,12 @@
             </p>
             <p><input type="submit" value="Upload" /></p>
         </form>
-        -->
+
+
+        <form action="{% url 'analyze:results2' %}" method="post" enctype="multipart/form-data">
+            <p>Submit your APK's for analysis</p>
+            <p><input type="submit" value="Submit" /></p>
+        </form>
+        
     </body>
 </html> 
