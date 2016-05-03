@@ -1,9 +1,22 @@
 
+<!--
 <form action="{% url 'analyze:results' %}" method="post">
-{% csrf_token %}
+	{% csrf_token %}
 
-<input type="radio" name="fieldNameOfData" id="123" value="test1" />
-<label for="choice123">some text</label><br />
+	<input type="radio" name="fieldNameOfData" id="123" value="test1" />
+	<label for="choice123">some text</label><br />
 
-<input type="submit" value="upload" />
+	<input type="submit" value="upload" />
+</form>
+-->
+
+<!-- Upload form. Note enctype attribute! -->
+
+<form action="{% url 'analyze:list' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- FOR MULTIPLE <input type="file" name="uploadedFiles" multiple="multiple"/> -->
+    <input type="file" name="uploadedFiles" />
+    <input type="submit" name="submit" value="Upload" />
+
+
 </form>

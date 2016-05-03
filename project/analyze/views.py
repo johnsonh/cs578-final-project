@@ -4,42 +4,77 @@ from django.core.urlresolvers import reverse
 
 import json
 
+from models import Document
+from forms import DocumentForm
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+
 # this is the input page
 def index(request):
-    context = {
-        'stuff': "print me!",
-    }
-    return render(request, 'analyze/index.html', context)
+	context = {
+		'stuff': "print me!",
+	}
+	print("dfdfd")
+	return render(request, 'analyze/index.html', context)
 
 
 def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
+	return HttpResponse("You're looking at question %s." % question_id)
 
 # this is the results page 
 def results(request):
-	data = callBackend(request.POST)
-	print(type(data))
-	print(json.dumps(data))
-	return render(request, 'analyze/results.html', {'data': json.dumps(data)})
+	try:
+		data = callBackend(request.POST)
+		print(type(data))
+		print(json.dumps(data))
+	except (KeyError, Choice.DoesNotExist):
+		# Redisplay the question voting form.
+		return render(request, 'analyze/index.html', {
+			'error_message': "You didn't select a choice.",
+		})
+	else:		
+		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
-# this is basically a controller/handler - it's the destination of index (which has the input form), 
-# it does some logic, and then redirects to the results page 
-def upload(request):
-    try:
-    	data = callBackend(request.POST)
-        
-    	# make fieldNameOfData a static variable
-        dataField = request.POST['fieldNameOfData']
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'analyze/index.html', {
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('analyze:index'))
+def list(request):
+	print("got here")
+	# Handle file upload
+	if request.method == 'POST':
+		print("type of the file input is " + str(type(request.FILES)))
+
+		# FOR MULTPLE
+		# for afile in request.FILES.getlist('uploadedFiles'):
+		# 	saveFile(request.POST, afile)
+		
+		saveFile(request.POST, request.FILES)
+
+		# Redirect to the document list after POST
+		print("Redirect")
+		return HttpResponseRedirect(reverse('analyze/list.html'))
+	else:
+		form = DocumentForm() # A empty, unbound form
+
+	# Load documents for the list page
+	documents = Document.objects.all()
+
+	print("Render")
+	# Render list page with the documents and the form
+	return render_to_response(
+		'analyze/list.html',
+		{'documents': documents, 'form': form},
+		context_instance=RequestContext(request)
+	)
+
+def saveFile(POST, FILES):
+	print("entry is " + str(FILES))
+
+	# FOR MULTPLE - instead of file should be a dictionary form of FILES['some key']
+	# form = DocumentForm(request.POST, {"file" : file})
+	form = DocumentForm(POST, FILES)
+	if form.is_valid():
+		newdoc = Document(docfile = request.FILES['docfile'])
+		newdoc.save()
+
 
 def callBackend(data):
 	return HARDCODED_JSON
@@ -80,6 +115,6 @@ HARDCODED_JSON = {
 
 """
 def visualization(request, nodesJson, linksJson):
-    return RenderTemplate(nodesJson, linksJson)
+	return RenderTemplate(nodesJson, linksJson)
 
 """
