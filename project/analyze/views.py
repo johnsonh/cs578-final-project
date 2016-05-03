@@ -11,17 +11,6 @@ def index(request):
     }
     return render(request, 'analyze/index.html', context)
 
-
-def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
-
-# this is the results page 
-def results(request):
-	data = callBackend(request.POST)
-	print(type(data))
-	print(json.dumps(data))
-	return render(request, 'analyze/results.html', {'data': json.dumps(data)})
-
 # this is basically a controller/handler - it's the destination of index (which has the input form), 
 # it does some logic, and then redirects to the results page 
 def upload(request):
@@ -40,6 +29,16 @@ def upload(request):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('analyze:index'))
+
+def feedback(request):
+	pass
+
+# this is the results page 
+def results(request):
+	data = callBackend(request.POST)
+	print(type(data))
+	print(json.dumps(data))
+	return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
 def callBackend(data):
 	return HARDCODED_JSON
