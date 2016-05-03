@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html ng-app="">
+<head>
+    <style>
+        #diagramContainer {
+            padding: 20px;
+            width:80%; height: 200px;
+            border: 1px solid gray;
+        }
+        .autocontainer{
+            position: absolute;
+            top: 50px;
+        }
+        .item {
+            height:80px; width: 80px;
+            border: 1px solid blue;
+            float: left;
+        }
+        .app {
+            width: 250px;
+            float: left;
+            text-align: center;
+            position: absolute;
+        }
+        .component {
+            height:20px; width: 250px;
+            position: absolute;
+            border: 1px solid blue;
+            text-align: center;
+        }
+        .container {
+             border:2px solid #ccc; 
+             width:800px; height: 200px; 
+             overflow-y: scroll; 
+        }
+    </style>
+</head>
+<body>
+    <div>Select which connections are not really a vulnerability</div>
+    <p>Covert Connections</p>
+    <div id="covertContainer" class="container"></div>
+    <p>DidFail Connections</p>
+    <div id="didfailContainer" class="container"></div>
+    <button type="button" id="submit" onclick="calculateResults()">Submit</button>
+    <div id="results"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.6.0/lodash.min.js"></script>
+    <script>
+    function calculateResults(){
+        var totalConnections = document.querySelectorAll('input[type="checkbox"]').length
+        var tagged = document.querySelectorAll('input[type="checkbox"]:checked').length
+        var result = document.getElementById("results")
+        var accuracy = 100 * (totalConnections - tagged) / totalConnections
+        result.innerHTML = "Total Connections: " + totalConnections + " False Positives: " + tagged + " Accuracy: " + accuracy.toFixed(2) +"%"
+    };
+
+    function createListItem(start,end,container){
+        var checkbox = document.createElement("input");
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.name = start + end;
+        checkbox.value = start + end;
+        checkbox.id = start + end;
+        var label = document.createElement('label')
+        label.htmlFor = start + end;
+        label.appendChild(document.createTextNode(start + " to " + end));
+        var mybr = document.createElement('br');
+        container.appendChild(checkbox);
+        container.appendChild(label)
+        container.appendChild(mybr)
+    }
+    var covertcontainer = document.getElementById("covertContainer");
+    var didfailcontainer = document.getElementById("didfailContainer");
+        console.log("RESULTS")
+        $.getJSON('data.json', function(data) {
+            console.log(data)
+            _.each(data['covert'], function(value, key){
+                createListItem(value['start'], value['end'],covertcontainer)
+            });
+            _.each(data['didfail'], function(value, key){
+                createListItem(value['start'], value['end'],didfailcontainer)
+            });
+        }).error(function(xhr) {
+            console.log(xhr)
+        });
+    </script> 
+
+</body>
+</html>
