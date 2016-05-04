@@ -73,7 +73,8 @@ def deleteAllDocs(documents):
 # new result page
 def visualization(request):
 	try:
-		data = callAnalysisTools(os.getcwd() + media_dir)
+		data = getAnalysisJson(os.getcwd() + media_dir)
+		request.session['data'] = data
 	except (KeyError):
 		# Redisplay the question voting form.
 		return render(request, 'analyze/index.html', {
@@ -82,15 +83,15 @@ def visualization(request):
 	else:		
 		return render(request, 'analyze/visualization.html', {'data': json.dumps(data)})
 
-def callAnalysisTools(path):
+def feedback(request):
+	return render(request, 'analyze/feedback.html', {'data': json.dumps(request.session['data'])})
+
+def getAnalysisJson(path):
 	print("Directory is: " + path)
 	resultJson = parser.analyze(path)	
-
 	# dirs = os.listdir( path )
 	# print("files in dir are: " + str(dirs))
 	return resultJson
-
-
 
 
 HARDCODED_JSON = {
