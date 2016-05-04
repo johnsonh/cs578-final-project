@@ -35,11 +35,10 @@ def results(request):
 		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
 
-
 # DO THIS
 def results2(request):
 	try:
-		data = callBackendWithDir(os.getcwd() + "../media/documents/2016/05/03")
+		data = callBackendWithDir(os.getcwd() + "/media/documents/2016/05/03")
 	except (KeyError):
 		# Redisplay the question voting form.
 		return render(request, 'analyze/index.html', {
@@ -84,10 +83,11 @@ def callBackend(data):
 
 def callBackendWithDir(path):
 	dirs = os.listdir( path )
-
+	print("dirs are: " + str(dirs))
 	# This would print all the files and directories
 	for file in dirs:
 		print file
+	return HARDCODED_JSON
 
 HARDCODED_JSON = {
 	"apps":[

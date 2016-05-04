@@ -31,6 +31,7 @@
 
 
         <form action="{% url 'analyze:results2' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <p>Submit your APK's for analysis</p>
             <p><input type="submit" value="Submit" /></p>
         </form>
