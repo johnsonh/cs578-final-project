@@ -5,11 +5,12 @@ import subprocess
 import shutil
 import json
 
-apps = []
-covert = []
-didfail = []
-
 def analyze(path):
+  print("yayayayyaya")
+  apps = []
+  covert = []
+  didfail = []
+
   # run covert  
   covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
   for apk_file in os.listdir(path):
@@ -136,12 +137,27 @@ def analyze(path):
   output['apps'] = apps
   output['covert'] = covert
   output['didfail'] = didfail
-  
-  json_data = json.dumps(output)
+
+  # return output
+
+  # json_data = json.dumps(output)
      
   f = open('data.txt', 'w')
   f.write(str(output))
   f.close()  
-  #print(output)
+  # print(output)
 
-analyze(sys.argv[1])
+  return output
+
+# analyze(sys.argv[1])
+
+
+
+
+
+
+
+
+
+
+

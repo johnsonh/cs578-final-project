@@ -10,6 +10,9 @@ from forms import DocumentForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+import parser
+
+media_dir = "/media/apks"
 
 # this is the input page
 def index(request):
@@ -19,8 +22,8 @@ def index(request):
 	return render(request, 'analyze/index.html', context)
 
 
-def detail(request, question_id):
-	return HttpResponse("You're looking at question %s." % question_id)
+# def detail(request, question_id):
+# 	return HttpResponse("You're looking at question %s." % question_id)
 
 # this is the results page 
 def results(request):
@@ -36,17 +39,16 @@ def results(request):
 
 
 # DO THIS
-def results2(request):
+def visualization(request):
 	try:
-		data = callBackendWithDir(os.getcwd() + "/media/documents/2016/05/03")
+		data = callBackendWithDir(os.getcwd() + media_dir)
 	except (KeyError):
 		# Redisplay the question voting form.
 		return render(request, 'analyze/index.html', {
 			'error_message': "You didn't select a choice.",
 		})
 	else:		
-		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
-
+		return render(request, 'analyze/visualization.html', {'data': json.dumps(data)})
 
 # 
 def list(request):
@@ -78,15 +80,16 @@ def deleteAllDocs(documents):
     for doc in documents:
     	doc.delete()
 
+
 def callBackend(data):
 	return HARDCODED_JSON
 
 def callBackendWithDir(path):
-	dirs = os.listdir( path )
-	print("dirs are: " + str(dirs))
-	# This would print all the files and directories
-	for file in dirs:
-		print file
+	print("Directory is: " + path)
+	resultJson = parser.analyze(path)	
+
+	# dirs = os.listdir( path )
+	# print("files in dir are: " + str(dirs))
 	return HARDCODED_JSON
 
 HARDCODED_JSON = {
