@@ -14,18 +14,14 @@ import parser
 
 media_dir = "/media/apks"
 
-# this is the input page
+# OLD INPUT PAGE
 def index(request):
 	context = {
 		'stuff': "print me!",
 	}
 	return render(request, 'analyze/index.html', context)
 
-
-# def detail(request, question_id):
-# 	return HttpResponse("You're looking at question %s." % question_id)
-
-# this is the results page 
+# OLD RESULT PAGE
 def results(request):
 	try:
 		data = callBackend(request.POST)
@@ -37,20 +33,12 @@ def results(request):
 	else:		
 		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
+def callBackend(data):
+	return HARDCODED_JSON
 
-# DO THIS
-def visualization(request):
-	try:
-		data = callBackendWithDir(os.getcwd() + media_dir)
-	except (KeyError):
-		# Redisplay the question voting form.
-		return render(request, 'analyze/index.html', {
-			'error_message': "You didn't select a choice.",
-		})
-	else:		
-		return render(request, 'analyze/visualization.html', {'data': json.dumps(data)})
+###################
 
-# 
+# New input page
 def list(request):
     # Handle file upload
     if request.method == 'POST':
@@ -76,21 +64,34 @@ def list(request):
         context_instance=RequestContext(request)
     )
 
+# just for cleaning up 
 def deleteAllDocs(documents):
     for doc in documents:
     	doc.delete()
 
 
-def callBackend(data):
-	return HARDCODED_JSON
+# new result page
+def visualization(request):
+	try:
+		data = callAnalysisTools(os.getcwd() + media_dir)
+	except (KeyError):
+		# Redisplay the question voting form.
+		return render(request, 'analyze/index.html', {
+			'error_message': "You didn't select a choice.",
+		})
+	else:		
+		return render(request, 'analyze/visualization.html', {'data': json.dumps(data)})
 
-def callBackendWithDir(path):
+def callAnalysisTools(path):
 	print("Directory is: " + path)
 	resultJson = parser.analyze(path)	
 
 	# dirs = os.listdir( path )
 	# print("files in dir are: " + str(dirs))
-	return HARDCODED_JSON
+	return resultJson
+
+
+
 
 HARDCODED_JSON = {
 	"apps":[

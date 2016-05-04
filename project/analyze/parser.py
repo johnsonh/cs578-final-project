@@ -6,7 +6,6 @@ import shutil
 import json
 
 def analyze(path):
-  print("yayayayyaya")
   apps = []
   covert = []
   didfail = []
