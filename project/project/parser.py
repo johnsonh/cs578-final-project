@@ -136,8 +136,8 @@ def analyze(path):
   output['apps'] = apps
   output['covert'] = covert
   output['didfail'] = didfail
-  #with open('data.txt', 'w') as outfile:
-    #json.dumps(output, outfile)
+  
+  json_data = json.dumps(output)
      
   f = open('data.txt', 'w')
   f.write(str(output))
