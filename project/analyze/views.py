@@ -33,6 +33,16 @@ def results(request):
 	else:		
 		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
+def feedback(request):
+	pass
+
+# this is the results page 
+def results(request):
+	data = callBackend(request.POST)
+	print(type(data))
+	print(json.dumps(data))
+	return render(request, 'analyze/results.html', {'data': json.dumps(data)})
+
 def callBackend(data):
 	return HARDCODED_JSON
 
@@ -92,6 +102,7 @@ def getAnalysisJson(path):
 	# dirs = os.listdir( path )
 	# print("files in dir are: " + str(dirs))
 	return resultJson
+	# return HARDCODED_JSON
 
 
 HARDCODED_JSON = {

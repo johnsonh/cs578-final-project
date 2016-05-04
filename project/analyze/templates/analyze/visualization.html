@@ -31,6 +31,12 @@
     </style>
 </head>
 <body>
+    <form action="{% url 'analyze:feedback' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Go to feedback page to confirm paths that are at risk: </p>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+
     <div>Green:DidFail, Blue:Covert, Hover over a connection to highlight it! Hover over a component to see it's full name</div>
     <div id="autocontainer" class="autocontainer"></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
