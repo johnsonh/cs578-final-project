@@ -5,21 +5,38 @@ import subprocess
 import shutil
 import json
 
+apps = []
+covert = []
+didfail = []
+
 def analyze(path):
-  apps = []
-  covert = []
-  didfail = []
+  covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
+  didfail_path = '/root/didfail/toyapps/out/'
+  didfail_sh = '/root/didfail/cert/run-didfail.sh'
+  didfail_apk = '/root/didfail/toyapps/*.apk'
+  didfail_folder = '/root/didfail/toyapps'
+  
+  # delete any data in covert and didfail folders before starting
+  #if os.path.isdir(covert_apk_path):
+  #  shutil.rmtree(covert_apk_path)
+  #os.makedirs(covert_apk_path)
+  #if os.path.isdir(didfail_path):
+  #  shutil.rmtree(didfail_path)
+  #os.makedirs(didfail_path)
+  #for file in os.listdir(didfail_folder):
+  #  if file.endswith(".apk"):
+  #    os.remove(didfail_folder + '/' + file)
 
   # run covert  
-  covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
   for apk_file in os.listdir(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
-      if not os.path.isfile(covert_apk_path + '/' + apk_file):
-        shutil.copy(path + '/' + apk_file, covert_apk_path)
-  p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
-  p.communicate()
+      #if not os.path.isfile(covert_apk_path + '/' + apk_file):
+        #shutil.copy(path + '/' + apk_file, covert_apk_path)
+  os.chdir('/home/dawn/covert_dist')
+  #p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
+  #p.communicate()
 
   # get all apps names and components
   Apps = {}
@@ -64,24 +81,27 @@ def analyze(path):
       for key2 in filter_component:
         for value2 in filter_component[key2]:
           if value == value2 and intent_component[key][value] == filter_component[key2][value2]:
-            connection = {}
-            connection['start'] = key
-            connection['end'] = key2
-            covert.append(connection)
+            same_app = False
+            for name in Apps:
+              if key.lower().find(name.lower()) != -1 and key2.lower().find(name.lower()) != -1:
+                same_app = True
+              if not same_app:
+                connection = {}
+                connection['start'] = key
+                connection['end'] = key2
+                covert.append(connection)
 
   # run DidFail
-  didfail_path = '/home/dawn/didfail/toyapps/out/'
-  didfail_sh = '/home/dawn/didfail/cert/run-didfail.sh'
-  didfail_apk = '/home/dawn/didfail/toyapps/*.apk'
-  didfail_folder = '/home/dawn/didfail/toyapps'
   for apk_file in os.listdir(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
-      shutil.copy(path + '/' + new_apk_file, didfail_folder)
-  p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
-  p.communicate()
-  #, stdout=subprocess.PIPE).communicate()[0]
+      os.chdir('/root/')
+      #if not os.path.isfile(didfail_folder + '/' + new_apk_file):
+        #shutil.copy(path + '/' + new_apk_file, didfail_folder)
+  #p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
+  #p.communicate()
+
   # get didfail connections
   epicc = {}
   epicc_action = {}
@@ -136,27 +156,6 @@ def analyze(path):
   output['apps'] = apps
   output['covert'] = covert
   output['didfail'] = didfail
-
-  # return output
-
-  # json_data = json.dumps(output)
-     
-  f = open('data.txt', 'w')
-  f.write(str(output))
-  f.close()  
-  # print(output)
-
+  print(output)
+  
   return output
-
-# analyze(sys.argv[1])
-
-
-
-
-
-
-
-
-
-
-
