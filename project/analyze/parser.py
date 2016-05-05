@@ -10,7 +10,7 @@ covert = []
 didfail = []
 
 def analyze(path):
-  covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
+  covert_apk_path = '/root/covert_dist/app_repo/bundle'
   didfail_path = '/root/didfail/toyapps/out/'
   didfail_sh = '/root/didfail/cert/run-didfail.sh'
   didfail_apk = '/root/didfail/toyapps/*.apk'
@@ -43,7 +43,7 @@ def analyze(path):
 
   # get all apps names and components
   Apps = {}
-  covert_model = '/home/dawn/covert_dist/app_repo/bundle/analysis/model'
+  covert_model = '/root/covert_dist/app_repo/bundle/analysis/model'
   for xml_file in os.listdir(covert_model):
     if xml_file.endswith(".xml"):
       e = etree.parse(covert_model + '/' + xml_file)
