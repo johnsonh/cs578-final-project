@@ -24,7 +24,7 @@ def analyze(path):
   #  shutil.rmtree(didfail_path)
   #os.makedirs(didfail_path)
   for file in os.listdir(covert_apk_path):
-    if (file.endswith(".apk"):
+    if file.endswith(".apk"):
       os.remove(covert_apk_path + '/' + file)
   for file in os.listdir(didfail_folder):
     if file.endswith(".apk"):
