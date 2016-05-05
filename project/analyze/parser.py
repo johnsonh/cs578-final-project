@@ -45,19 +45,17 @@ def analyze(path):
     if xml_file.endswith(".xml"):
       e = etree.parse(covert_model + '/' + xml_file)
       Apps[e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')] = e
-      app = {}
-      components = []
-      app['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
-      for comp in e.findall('components')[0].findall('Component'):
-        components.append(comp.find('name').text)
-      app['components'] = components
-      apps.append(app)
-      
+  app = {}
+  components = []
+
   # get covert connections
   filter_component = {}
   intent_component = {}
   for app in Apps:
+    app['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
     for comp in Apps[app].findall('components')[0].findall('Component'):
+      components.append(comp.find('name').text)
+      
       for filt in comp.findall('IntentFilter')[0].findall('filter'):
         for act in filt.findall('actions'):
           if act.text != 'android.intent.action.MAIN':
@@ -76,6 +74,9 @@ def analyze(path):
           mime = intent.find('dataType').text
         intents[intent.find('action').text.replace('"','')] = mime.replace('"','')
     intent_component[intent.find('sender').text] = intents
+    components.append(comp.find('name').text)
+    app['components'] = components
+  apps.append(app)
   for key in intent_component:
     for value in intent_component[key]:
       for key2 in filter_component:
