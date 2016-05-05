@@ -25,7 +25,7 @@ def analyze(path):
   os.makedirs(didfail_path)
   for file in os.listdir(didfail_folder):
     if file.endswith(".apk"):
-      os.remove(file)
+      os.remove(didfail_folder + '/' + file)
 
   # run covert  
   for apk_file in os.listdir(path):
