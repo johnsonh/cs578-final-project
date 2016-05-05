@@ -74,10 +74,8 @@ def analyze(path):
         if intent.find('dataType').text is not None:
           mime = intent.find('dataType').text
         intents[intent.find('action').text.replace('"','')] = mime.replace('"','')
-        components.append(intent.find('sender').text)
-    print (components)
     intent_component[intent.find('sender').text] = intents
-    #components.append(intent.find('sender').text)
+    components.append(intent.find('sender').text)
     app_list['components'] = components
   apps.append(app_list)
   for key in intent_component:
