@@ -124,7 +124,10 @@ def analyze(path):
       for line in open_file:
         if txtFound: 
           if '-' in line:
-            buffer.append(line.split('- ', 1)[1])
+            if len(line.split('-',1)) == 1:
+              buffer.append(line.split('- ', 1)[1])
+            else:
+              buffer.append(line)
           if 'Action: ' in line:
             buffer.append(line.split(',', 2)[0])
             buffer.append(line.split(',', 2)[1])
