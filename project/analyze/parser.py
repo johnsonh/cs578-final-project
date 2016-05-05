@@ -37,7 +37,7 @@ def analyze(path):
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
       #if not os.path.isfile(covert_apk_path + '/' + apk_file):
        # shutil.copy(path + '/' + apk_file, covert_apk_path)
-  os.chdir('/home/dawn/covert_dist')
+  os.chdir('/root/covert_dist')
   p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
   p.communicate()
 
