@@ -17,7 +17,7 @@ def analyze(path):
   didfail_folder = '/root/didfail/toyapps'
   
   # delete any data in covert and didfail folders before starting
-  if os.path.isdir(cover_apk_path):
+  if os.path.isdir(covert_apk_path):
     shutil.rmtree(covert_apk_path)
   os.makedirs(covert_apk_path)
   if os.path.isdir(didfail_path):
