@@ -10,8 +10,22 @@ covert = []
 didfail = []
 
 def analyze(path):
-  # run covert  
   covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
+  didfail_path = '/home/dawn/didfail/toyapps/out/'
+  didfail_sh = '/home/dawn/didfail/cert/run-didfail.sh'
+  didfail_apk = '/home/dawn/didfail/toyapps/*.apk'
+  didfail_folder = '/home/dawn/didfail/toyapps'
+  
+  # delete any data in covert and didfail folders before starting
+  shutil.rmtree(covert_apk_path)
+  os.makedirs(covert_apk_path)
+  shutil.rmtree(didfail_path)
+  os.makedirs(didfail_path)
+  for file in os.listdir(didfail_folder):
+    if file.endswith(".apk"):
+      os.remove(file)
+
+  # run covert  
   for apk_file in os.listdir(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
@@ -76,10 +90,6 @@ def analyze(path):
                 covert.append(connection)
 
   # run DidFail
-  didfail_path = '/home/dawn/didfail/toyapps/out/'
-  didfail_sh = '/home/dawn/didfail/cert/run-didfail.sh'
-  didfail_apk = '/home/dawn/didfail/toyapps/*.apk'
-  didfail_folder = '/home/dawn/didfail/toyapps'
   for apk_file in os.listdir(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
