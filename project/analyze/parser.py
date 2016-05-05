@@ -45,6 +45,7 @@ def analyze(path):
     if xml_file.endswith(".xml"):
       e = etree.parse(covert_model + '/' + xml_file)
       Apps[e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')] = e
+      app['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
   app = {}
   components = []
 
@@ -52,7 +53,6 @@ def analyze(path):
   filter_component = {}
   intent_component = {}
   for app in Apps:
-    app['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
     for comp in Apps[app].findall('components')[0].findall('Component'):
       components.append(comp.find('name').text)
       
