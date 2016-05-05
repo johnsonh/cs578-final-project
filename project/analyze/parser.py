@@ -32,8 +32,8 @@ def analyze(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
-      if not os.path.isfile(covert_apk_path + '/' + apk_file):
-        shutil.copy(path + '/' + apk_file, covert_apk_path)
+      #if not os.path.isfile(covert_apk_path + '/' + apk_file):
+        #shutil.copy(path + '/' + apk_file, covert_apk_path)
   os.chdir('/home/dawn/covert_dist')
   #p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
   #p.communicate()
@@ -97,8 +97,8 @@ def analyze(path):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
       os.chdir('/root/')
-      if not os.path.isfile(didfail_folder + '/' + new_apk_file):
-        shutil.copy(path + '/' + new_apk_file, didfail_folder)
+      #if not os.path.isfile(didfail_folder + '/' + new_apk_file):
+        #shutil.copy(path + '/' + new_apk_file, didfail_folder)
   #p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
   #p.communicate()
 
@@ -156,5 +156,6 @@ def analyze(path):
   output['apps'] = apps
   output['covert'] = covert
   output['didfail'] = didfail
+  print(output)
   
   return output
