@@ -33,9 +33,6 @@ def results(request):
 	else:		
 		return render(request, 'analyze/results.html', {'data': json.dumps(data)})
 
-def feedback(request):
-	pass
-
 # this is the results page 
 def results(request):
 	data = callBackend(request.POST)
