@@ -83,7 +83,7 @@ def deleteAllDocs(documents):
 # new result page
 def visualization(request):
 	try:
-		data = getAnalysisJson(os.getcwd() + media_dir)
+		data = getAnalysisJson('/root/cs578/final/project' + media_dir)
 		request.session['data'] = data
 	except (KeyError):
 		# Redisplay the question voting form.
