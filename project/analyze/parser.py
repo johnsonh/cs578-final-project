@@ -5,11 +5,11 @@ import subprocess
 import shutil
 import json
 
-def analyze(path):
-  apps = []
-  covert = []
-  didfail = []
+apps = []
+covert = []
+didfail = []
 
+def analyze(path):
   # run covert  
   covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
   for apk_file in os.listdir(path):
@@ -18,6 +18,7 @@ def analyze(path):
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
       if not os.path.isfile(covert_apk_path + '/' + apk_file):
         shutil.copy(path + '/' + apk_file, covert_apk_path)
+  os.chdir('/home/dawn/covert_dist')
   p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
   p.communicate()
 
@@ -64,10 +65,15 @@ def analyze(path):
       for key2 in filter_component:
         for value2 in filter_component[key2]:
           if value == value2 and intent_component[key][value] == filter_component[key2][value2]:
-            connection = {}
-            connection['start'] = key
-            connection['end'] = key2
-            covert.append(connection)
+            same_app = False
+            for name in Apps:
+              if key.lower().find(name.lower()) != -1 and key2.lower().find(name.lower()) != -1:
+                same_app = True
+              if not same_app:
+                connection = {}
+                connection['start'] = key
+                connection['end'] = key2
+                covert.append(connection)
 
   # run DidFail
   didfail_path = '/home/dawn/didfail/toyapps/out/'
@@ -78,10 +84,12 @@ def analyze(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
-      shutil.copy(path + '/' + new_apk_file, didfail_folder)
+      os.chdir('/home/dawn')
+      if not os.path.isfile(didfail_folder + '/' + new_apk_file):
+        shutil.copy(path + '/' + new_apk_file, didfail_folder)
   p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
   p.communicate()
-  #, stdout=subprocess.PIPE).communicate()[0]
+
   # get didfail connections
   epicc = {}
   epicc_action = {}
@@ -136,27 +144,5 @@ def analyze(path):
   output['apps'] = apps
   output['covert'] = covert
   output['didfail'] = didfail
-
-  # return output
-
-  # json_data = json.dumps(output)
-     
-  f = open('data.txt', 'w')
-  f.write(str(output))
-  f.close()  
-  # print(output)
-
+  
   return output
-
-# analyze(sys.argv[1])
-
-
-
-
-
-
-
-
-
-
-
