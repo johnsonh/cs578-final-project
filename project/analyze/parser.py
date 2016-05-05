@@ -54,7 +54,8 @@ def analyze(path):
       for intent in e.findall('newIntents')[0].findall('Intent'):
         if intent.find('action').text:
           if intent.find('dataType').text is not None:
-            components.append(intent.find('sender').text)
+            if not any (intent.find('sender').text in s for s in components):
+              components.append(intent.find('sender').text)
       app_list['components'] = components
       apps.append(app_list)
 
