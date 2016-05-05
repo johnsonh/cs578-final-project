@@ -40,14 +40,14 @@ def analyze(path):
 
   # get all apps names and components
   Apps = {}
-  app = {}
+  app_list = {}
   components = []
   covert_model = '/home/dawn/covert_dist/app_repo/bundle/analysis/model'
   for xml_file in os.listdir(covert_model):
     if xml_file.endswith(".xml"):
       e = etree.parse(covert_model + '/' + xml_file)
       Apps[e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')] = e
-      app['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
+      app_list['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
   
 
   # get covert connections
@@ -78,8 +78,8 @@ def analyze(path):
     print (components)
     intent_component[intent.find('sender').text] = intents
     #components.append(intent.find('sender').text)
-    app['components'] = components
-  apps.append(app)
+    app_list['components'] = components
+  apps.append(app_list)
   for key in intent_component:
     for value in intent_component[key]:
       for key2 in filter_component:
