@@ -40,15 +40,23 @@ def analyze(path):
 
   # get all apps names and components
   Apps = {}
-  app_list = {}
-  components = []
   covert_model = '/home/dawn/covert_dist/app_repo/bundle/analysis/model'
   for xml_file in os.listdir(covert_model):
     if xml_file.endswith(".xml"):
       e = etree.parse(covert_model + '/' + xml_file)
       Apps[e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')] = e
-      app_list['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
-  
+      app = {}
+      components = []
+      app['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
+      for comp in e.findall('components')[0].findall('Component'):
+        components.append(comp.find('name').text)
+      for app in Apps:
+        for intent in e.findall('newIntents')[0].findall('Intent'):
+          if intent.find('action').text:
+            if intent.find('dataType').text is not None:
+              components.append(intent.find('sender').text)
+      app['components'] = components
+      apps.append(app)
 
   # get covert connections
   filter_component = {}
@@ -75,9 +83,6 @@ def analyze(path):
           mime = intent.find('dataType').text
         intents[intent.find('action').text.replace('"','')] = mime.replace('"','')
     intent_component[intent.find('sender').text] = intents
-    components.append(intent.find('sender').text)
-    app_list['components'] = components
-  apps.append(app_list)
   for key in intent_component:
     for value in intent_component[key]:
       for key2 in filter_component:
