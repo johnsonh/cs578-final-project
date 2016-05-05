@@ -50,11 +50,11 @@ def analyze(path):
       app_list['name'] = e.findall('name')[0].text.replace('-','_').replace(' ','_').replace('&','AND')
       for comp in e.findall('components')[0].findall('Component'):
         components.append(comp.find('name').text)
-      for app in Apps:
-        for intent in Apps[app].findall('newIntents')[0].findall('Intent'):
-          if intent.find('action').text:
-            if intent.find('dataType').text is not None:
-              components.append(intent.find('sender').text)
+      #for app in Apps:
+      for intent in e.findall('newIntents')[0].findall('Intent'):
+        if intent.find('action').text:
+          if intent.find('dataType').text is not None:
+            components.append(intent.find('sender').text)
       app_list['components'] = components
       apps.append(app_list)
 
