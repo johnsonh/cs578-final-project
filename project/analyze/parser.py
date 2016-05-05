@@ -23,20 +23,23 @@ def analyze(path):
   #if os.path.isdir(didfail_path):
   #  shutil.rmtree(didfail_path)
   #os.makedirs(didfail_path)
-  #for file in os.listdir(didfail_folder):
-  #  if file.endswith(".apk"):
-  #    os.remove(didfail_folder + '/' + file)
+  for file in os.listdir(covert_apk_path):
+    if (file.endswith(".apk"):
+      os.remove(covert_apk_path + '/' + file)
+  for file in os.listdir(didfail_folder):
+    if file.endswith(".apk"):
+      os.remove(didfail_folder + '/' + file)
 
   # run covert  
   for apk_file in os.listdir(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
-      #if not os.path.isfile(covert_apk_path + '/' + apk_file):
-        #shutil.copy(path + '/' + apk_file, covert_apk_path)
+      if not os.path.isfile(covert_apk_path + '/' + apk_file):
+        shutil.copy(path + '/' + apk_file, covert_apk_path)
   os.chdir('/home/dawn/covert_dist')
-  #p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
-  #p.communicate()
+  p = subprocess.Popen(['sh', './covert.sh', 'bundle'])
+  p.communicate()
 
   # get all apps names and components
   Apps = {}
@@ -105,10 +108,10 @@ def analyze(path):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
       os.chdir('/root/')
-      #if not os.path.isfile(didfail_folder + '/' + new_apk_file):
-        #shutil.copy(path + '/' + new_apk_file, didfail_folder)
-  #p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
-  #p.communicate()
+      if not os.path.isfile(didfail_folder + '/' + new_apk_file):
+        shutil.copy(path + '/' + new_apk_file, didfail_folder)
+  p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
+  p.communicate()
 
   # get didfail connections
   epicc = {}
