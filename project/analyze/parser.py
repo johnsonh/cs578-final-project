@@ -55,7 +55,7 @@ def analyze(path):
   intent_component = {}
   for app in Apps:
     for comp in Apps[app].findall('components')[0].findall('Component'):
-      #components.append(comp.find('name').text)
+      components.append(comp.find('name').text)
       
       for filt in comp.findall('IntentFilter')[0].findall('filter'):
         for act in filt.findall('actions'):
@@ -75,6 +75,7 @@ def analyze(path):
           mime = intent.find('dataType').text
         intents[intent.find('action').text.replace('"','')] = mime.replace('"','')
         components.append(intent.find('sender').text)
+    print (components)
     intent_component[intent.find('sender').text] = intents
     #components.append(intent.find('sender').text)
     app['components'] = components
