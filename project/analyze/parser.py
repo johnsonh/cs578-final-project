@@ -11,10 +11,10 @@ didfail = []
 
 def analyze(path):
   covert_apk_path = '/home/dawn/covert_dist/app_repo/bundle'
-  didfail_path = '/home/dawn/didfail/toyapps/out/'
-  didfail_sh = '/home/dawn/didfail/cert/run-didfail.sh'
-  didfail_apk = '/home/dawn/didfail/toyapps/*.apk'
-  didfail_folder = '/home/dawn/didfail/toyapps'
+  didfail_path = '/root/didfail/toyapps/out/'
+  didfail_sh = '/root/didfail/cert/run-didfail.sh'
+  didfail_apk = '/root/didfail/toyapps/*.apk'
+  didfail_folder = '/root/didfail/toyapps'
   
   # delete any data in covert and didfail folders before starting
   shutil.rmtree(covert_apk_path)
@@ -94,7 +94,7 @@ def analyze(path):
     if apk_file.endswith(".apk"):
       new_apk_file = apk_file.replace(' ','_').replace('&','AND').replace('-','_')
       os.rename(path + '/' + apk_file, path + '/' + new_apk_file)
-      os.chdir('/home/dawn')
+      os.chdir('/root/')
       if not os.path.isfile(didfail_folder + '/' + new_apk_file):
         shutil.copy(path + '/' + new_apk_file, didfail_folder)
   p = subprocess.Popen([didfail_sh, didfail_path, didfail_apk])
